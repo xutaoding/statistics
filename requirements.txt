@@ -1,0 +1,5 @@
+# pytohn 2.7.x
+
+django==1.9.4
+simplejson==3.8.1
+tld==0.7.6
