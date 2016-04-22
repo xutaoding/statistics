@@ -1,4 +1,4 @@
-# 1/root/.pyenv/versions/anaconda-2.3.0/bin/python
+#!/root/.pyenv/versions/anaconda-2.3.0/bin/python
 import os
 import sys
 
