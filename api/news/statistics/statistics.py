@@ -14,6 +14,15 @@ from eggs.utils import FailureMsg, get_date_range
 
 
 class Config(object):
+    category = {
+        'hot': '热点新闻',
+        'hjd': '热点新闻',
+        'us_gg': '美股个股',
+        'us_hg': '美股宏观',
+        'us_gs': '美股股市',
+        'us_hy': '美股行业',
+    }
+
     def __init__(self, query_start, query_end):
         self.query_start = query_start
         self.query_end = query_end
@@ -85,6 +94,9 @@ class StatisticsBase(Config, FailureMsg):
             return False, self.get_error_msg(error_type=205, info=info)
         return True, self.get_error_msg()
 
+    def convert_cat(self, cat):
+        return self.category.get(cat, cat)
+
     def _parse(self, dataset):
         """
         Parse data to calculate and sort about news
@@ -115,15 +127,6 @@ class StatisticsBefore(StatisticsBase):
     """
     Statistics crawled news before analysis
     """
-    category = {
-        'hot': '热点新闻',
-        'hjd': '热点新闻',
-        'us_gg': '美股个股',
-        'us_hg': '美股宏观',
-        'us_gs': '美股股市',
-        'us_hy': '美股行业',
-    }
-
     def _get_data_from_files(self, date_path_range):
         """
         retrieval all data from crawled news files
@@ -166,9 +169,6 @@ class StatisticsBefore(StatisticsBase):
                     dataset[index[0]].setdefault(query_day, []).extend(dt_list)
         return dataset
 
-    def convert_cat(self, cat):
-        return self.category.get(cat, cat)
-
 
 class StatisticsAfter(StatisticsBase):
     """
@@ -190,7 +190,7 @@ class StatisticsAfter(StatisticsBase):
 
         for docs in mongo.query(query, fields):
             dt = docs['dt']
-            result[dt[:8]].append((docs['url'], docs['cat'], dt))
+            result[dt[:8]].append((docs['url'], self.convert_cat(docs['cat']), dt))
         return [{k: v} for k, v in result.iteritems()]
 
     def _top_dataset(self):
