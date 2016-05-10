@@ -1,7 +1,7 @@
 DEV_FULL_NEWS_PATH = '/data/news/csf_news/'
 DEV_HOT_NEWS_PATH = '/data/news/csf_hot_news/'
 
-DEV_MONGO_HOST = '10.0.3.10'
+DEV_MONGO_HOST = '10.0.250.10'
 DEV_MONGO_PORT = 27017
 DEV_MONGO_DB = 'news'
 DEV_MONGO_TOP_TBALE = 'topnews_analyse'

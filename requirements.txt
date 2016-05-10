@@ -1,6 +1,6 @@
 # pytohn 2.7.x
 
-django==1.9.4
+django==1.9.6
 simplejson==3.8.1
-pymongo==2.6.2
+pymongo
 tld==0.7.6

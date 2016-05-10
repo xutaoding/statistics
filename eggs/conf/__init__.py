@@ -21,7 +21,7 @@ def make_dev_ip():
     except socket.error:
         return '127.0.0.1'
 
-dev_host = ['54.223.52.50']
+dev_host = ['54.223.52.50', '10.0.3.11']
 
 
 if make_dev_ip() in dev_host:
