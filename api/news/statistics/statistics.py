@@ -111,10 +111,13 @@ class StatisticsBase(Config, FailureMsg):
                 # `query_date` is date string, `data_list` is list
                 result = defaultdict(lambda: defaultdict(int))
                 for uri, cat, dt in data_list:
-                    domain = get_tld(uri, as_object=True).domain
-                    result[domain][cat] += 1
-                    result[domain]['count'] += 1
-                    result[domain].setdefault(dt_dist, []).append(dt)
+                    try:
+                        domain = get_tld(uri, as_object=True).domain
+                        result[domain][cat] += 1
+                        result[domain]['count'] += 1
+                        result[domain].setdefault(dt_dist, []).append(dt)
+                    except Exception:
+                        pass
 
                 for site_domain in result.keys():
                     result[site_domain][dt_dist].sort()
@@ -185,8 +188,12 @@ class StatisticsAfter(StatisticsBase):
         result = defaultdict(list)
         mongo = Mongodb(*mongo_args)
         fields = {'url': 1, 'cat': 1, 'dt': 1}
-        date_range = ['^' + dr for dr in get_date_range(self.query_start, self.query_end)]
-        query = {'dt': re.compile(r'%s' % '|'.join(date_range))}
+        date_range = get_date_range(self.query_start, self.query_end)
+        date_range.sort()
+        query = {'dt': {
+            '$gte': date_range[0] + '000000',
+            '$lte': date_range[-1] + '235959'
+        }}
 
         for docs in mongo.query(query, fields):
             dt = docs['dt']
